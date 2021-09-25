@@ -1,20 +1,20 @@
+const path = require('path');
+
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const app = express();
 
-app.use('/',(req, res, next) => {
-    console.log('This always runs!');
-    next();
-});
+const adminRoutes = require('./routes/admin')
+const shopRoutes = require('./routes/shop')
 
-app.use('/add-product',(req, res, next) => {
-    console.log('In the milddleware!'); 
-    res.send('<h1>The "Add Procuct" Page</h1>'); //The default response header is text html
-});
+app.use(bodyParser.urlencoded({extended: false}));
 
-app.use('/',(req, res, next) => {
-    console.log('In another milddleware!'); 
-    res.send('<h1>Hello from Express</h1>'); //The default response header is text html
+app.use('/admin', adminRoutes);
+app.use(shopRoutes);
+
+app.use((req, res, next) => {
+    res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
 });
 
 app.listen(3000); //const server = http.createServer(app); //server.listen(3000);
