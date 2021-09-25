@@ -1,9 +1,20 @@
-const http = require('http');
+const express = require('express');
 
-const routes = require('./routes');
+const app = express();
 
-console.log(routes.someText);
+app.use('/',(req, res, next) => {
+    console.log('This always runs!');
+    next();
+});
 
-const server = http.createServer(routes.handler);
+app.use('/add-product',(req, res, next) => {
+    console.log('In the milddleware!'); 
+    res.send('<h1>The "Add Procuct" Page</h1>'); //The default response header is text html
+});
 
-server.listen(3000);
+app.use('/',(req, res, next) => {
+    console.log('In another milddleware!'); 
+    res.send('<h1>Hello from Express</h1>'); //The default response header is text html
+});
+
+app.listen(3000); //const server = http.createServer(app); //server.listen(3000);
